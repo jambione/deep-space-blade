@@ -1,0 +1,393 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00AFC2A80EAFC932BAE0ADCA /* EnemyNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641021C9CC0EC434BBDAFAFB /* EnemyNode.swift */; };
+		112EA3608B698406F00F6A83 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B83F9A12C60CFD29D8EA49 /* GameViewController.swift */; };
+		123FCE290E7AA0A9455F61F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EFD558393AF37B316967B4 /* AppDelegate.swift */; };
+		276BE5B6C35750CC414963EC /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 392DFB3C8BE3FE1CE7F6959A /* SpriteKit.framework */; };
+		31A593E3362FB57C8080935C /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5F00A7A59C3FA0B0AA6E96 /* GameOverScene.swift */; };
+		3B71463D07D1815C03C9F16E /* blueprints.json in Resources */ = {isa = PBXBuildFile; fileRef = E3378477557AC9E6E3D74A3E /* blueprints.json */; };
+		3C22AABD8F257F863893C008 /* LevelDirector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFB364BB3758C8C06D41B25 /* LevelDirector.swift */; };
+		468A51BA5DF80549FFA8CB70 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23CD3EE9237F981DA4E862FB /* AVFoundation.framework */; };
+		6364D89E7E90DB7D0078D859 /* ProjectilePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35D14479736EAC621A8D23 /* ProjectilePool.swift */; };
+		6BBE267BAEFC71027095607F /* DeepSpaceBlade/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4852C88E23D58CFF75191BF8 /* DeepSpaceBlade/Assets.xcassets */; };
+		70D01829FB0F3BD8921E45AC /* levels.json in Resources */ = {isa = PBXBuildFile; fileRef = 48A2D4D718ED0393BA2A2D05 /* levels.json */; };
+		7B5CFF3382BFEFE1310E026C /* MovementSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F788C030EB037F7B40AEEC /* MovementSystem.swift */; };
+		95AF25B07274332DBDFCC742 /* CollisionSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E691853DE9F4F78AC1ACBF /* CollisionSystem.swift */; };
+		992C075219732FDF7BECCDDE /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143151A955585DC1018D8EB4 /* GameModels.swift */; };
+		9A6A7DA80D96C24F6DB328B1 /* PlayerShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D22644EAF926A6053CCA018 /* PlayerShip.swift */; };
+		9B67B8613B84126C42D84585 /* WaveDirector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C450FFCD26D5EB67A6F901E5 /* WaveDirector.swift */; };
+		ADB6AE37BD2FA4F82034E51E /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352EE1E0477B255B02CF0C97 /* GameScene.swift */; };
+		C9C74351FEA9C3675363AB15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 980BC6B058E0B47DF5E1265B /* SceneDelegate.swift */; };
+		E9D6DC40E610666935AB3925 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7B967393B0184B37486F00 /* GameState.swift */; };
+		EE1E0F9C39BBEA1542127653 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D489CA790DFB61997A8E8D /* MenuScene.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0A35D14479736EAC621A8D23 /* ProjectilePool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectilePool.swift; sourceTree = "<group>"; };
+		11B83F9A12C60CFD29D8EA49 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		143151A955585DC1018D8EB4 /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
+		1DFB364BB3758C8C06D41B25 /* LevelDirector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelDirector.swift; sourceTree = "<group>"; };
+		23CD3EE9237F981DA4E862FB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		352EE1E0477B255B02CF0C97 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		392DFB3C8BE3FE1CE7F6959A /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		4852C88E23D58CFF75191BF8 /* DeepSpaceBlade/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DeepSpaceBlade/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		48A2D4D718ED0393BA2A2D05 /* levels.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = levels.json; sourceTree = "<group>"; };
+		641021C9CC0EC434BBDAFAFB /* EnemyNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyNode.swift; sourceTree = "<group>"; };
+		66EFD558393AF37B316967B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7D22644EAF926A6053CCA018 /* PlayerShip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerShip.swift; sourceTree = "<group>"; };
+		980BC6B058E0B47DF5E1265B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		9A7B967393B0184B37486F00 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
+		A5D489CA790DFB61997A8E8D /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		AEDB894C74B0BFB8ED84D2EF /* DeepSpaceBlade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeepSpaceBlade.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C450FFCD26D5EB67A6F901E5 /* WaveDirector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveDirector.swift; sourceTree = "<group>"; };
+		C6F788C030EB037F7B40AEEC /* MovementSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementSystem.swift; sourceTree = "<group>"; };
+		D3EC49C77ECFA9C5E2BF8E0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E3378477557AC9E6E3D74A3E /* blueprints.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = blueprints.json; sourceTree = "<group>"; };
+		E4E691853DE9F4F78AC1ACBF /* CollisionSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionSystem.swift; sourceTree = "<group>"; };
+		EE5F00A7A59C3FA0B0AA6E96 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		059DB2086B49B680F85B3555 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				276BE5B6C35750CC414963EC /* SpriteKit.framework in Frameworks */,
+				468A51BA5DF80549FFA8CB70 /* AVFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A2C978E52A76F0AA9F68BB5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AEDB894C74B0BFB8ED84D2EF /* DeepSpaceBlade.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		12305BD40DA3D22CD7D596A1 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				7D22644EAF926A6053CCA018 /* PlayerShip.swift */,
+				641021C9CC0EC434BBDAFAFB /* EnemyNode.swift */,
+				0A35D14479736EAC621A8D23 /* ProjectilePool.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		1629A0BB4117BEFC577EF28D = {
+			isa = PBXGroup;
+			children = (
+				C0DAD803AF83280F932B206E /* DeepSpaceBlade */,
+				B687106895D06AA330DAFED5 /* Frameworks */,
+				0A2C978E52A76F0AA9F68BB5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2DDF0419078C5C88F55C1F35 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				352EE1E0477B255B02CF0C97 /* GameScene.swift */,
+				A5D489CA790DFB61997A8E8D /* MenuScene.swift */,
+				EE5F00A7A59C3FA0B0AA6E96 /* GameOverScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		2F855E838186B2D955F1448C /* Systems */ = {
+			isa = PBXGroup;
+			children = (
+				E4E691853DE9F4F78AC1ACBF /* CollisionSystem.swift */,
+				C6F788C030EB037F7B40AEEC /* MovementSystem.swift */,
+			);
+			path = Systems;
+			sourceTree = "<group>";
+		};
+		887A6F90336FF23D95C3914B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				48A2D4D718ED0393BA2A2D05 /* levels.json */,
+				E3378477557AC9E6E3D74A3E /* blueprints.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A1C86A29E589D48EC70B6A32 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				143151A955585DC1018D8EB4 /* GameModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A2E3980563216BF0B0D2758A /* Director */ = {
+			isa = PBXGroup;
+			children = (
+				1DFB364BB3758C8C06D41B25 /* LevelDirector.swift */,
+				C450FFCD26D5EB67A6F901E5 /* WaveDirector.swift */,
+			);
+			path = Director;
+			sourceTree = "<group>";
+		};
+		B687106895D06AA330DAFED5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				392DFB3C8BE3FE1CE7F6959A /* SpriteKit.framework */,
+				23CD3EE9237F981DA4E862FB /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C0DAD803AF83280F932B206E /* DeepSpaceBlade */ = {
+			isa = PBXGroup;
+			children = (
+				D1D0524B025E57AFFF263442 /* App */,
+				2DDF0419078C5C88F55C1F35 /* Scenes */,
+				A1C86A29E589D48EC70B6A32 /* Models */,
+				A2E3980563216BF0B0D2758A /* Director */,
+				12305BD40DA3D22CD7D596A1 /* Entities */,
+				2F855E838186B2D955F1448C /* Systems */,
+				EE2E685605CC6567789FCEB4 /* State */,
+				887A6F90336FF23D95C3914B /* Resources */,
+				4852C88E23D58CFF75191BF8 /* DeepSpaceBlade/Assets.xcassets */,
+			);
+			path = DeepSpaceBlade;
+			sourceTree = "<group>";
+		};
+		D1D0524B025E57AFFF263442 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				66EFD558393AF37B316967B4 /* AppDelegate.swift */,
+				980BC6B058E0B47DF5E1265B /* SceneDelegate.swift */,
+				11B83F9A12C60CFD29D8EA49 /* GameViewController.swift */,
+				D3EC49C77ECFA9C5E2BF8E0D /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		EE2E685605CC6567789FCEB4 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				9A7B967393B0184B37486F00 /* GameState.swift */,
+			);
+			path = State;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42AEFBAE01D2DFD981F7DA7D /* DeepSpaceBlade */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE605FB886C05338BCB3D533 /* Build configuration list for PBXNativeTarget "DeepSpaceBlade" */;
+			buildPhases = (
+				FCA229C23F166EBB0BA5029E /* Sources */,
+				B9C6EB6F79FC54535ACB3053 /* Resources */,
+				059DB2086B49B680F85B3555 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeepSpaceBlade;
+			productName = DeepSpaceBlade;
+			productReference = AEDB894C74B0BFB8ED84D2EF /* DeepSpaceBlade.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					42AEFBAE01D2DFD981F7DA7D = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = E9898A0EB58D6691901DFE9F /* Build configuration list for PBXProject "DeepSpaceBlade" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1629A0BB4117BEFC577EF28D;
+			productRefGroup = 0A2C978E52A76F0AA9F68BB5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42AEFBAE01D2DFD981F7DA7D /* DeepSpaceBlade */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B9C6EB6F79FC54535ACB3053 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70D01829FB0F3BD8921E45AC /* levels.json in Resources */,
+				3B71463D07D1815C03C9F16E /* blueprints.json in Resources */,
+				6BBE267BAEFC71027095607F /* DeepSpaceBlade/Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FCA229C23F166EBB0BA5029E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				123FCE290E7AA0A9455F61F9 /* AppDelegate.swift in Sources */,
+				C9C74351FEA9C3675363AB15 /* SceneDelegate.swift in Sources */,
+				112EA3608B698406F00F6A83 /* GameViewController.swift in Sources */,
+				ADB6AE37BD2FA4F82034E51E /* GameScene.swift in Sources */,
+				EE1E0F9C39BBEA1542127653 /* MenuScene.swift in Sources */,
+				31A593E3362FB57C8080935C /* GameOverScene.swift in Sources */,
+				992C075219732FDF7BECCDDE /* GameModels.swift in Sources */,
+				3C22AABD8F257F863893C008 /* LevelDirector.swift in Sources */,
+				9B67B8613B84126C42D84585 /* WaveDirector.swift in Sources */,
+				9A6A7DA80D96C24F6DB328B1 /* PlayerShip.swift in Sources */,
+				00AFC2A80EAFC932BAE0ADCA /* EnemyNode.swift in Sources */,
+				6364D89E7E90DB7D0078D859 /* ProjectilePool.swift in Sources */,
+				95AF25B07274332DBDFCC742 /* CollisionSystem.swift in Sources */,
+				7B5CFF3382BFEFE1310E026C /* MovementSystem.swift in Sources */,
+				E9D6DC40E610666935AB3925 /* GameState.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		12653BB3A8FD0E8749A549D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASPLASHSCREEN_BACKGROUND_COLOR = 0x000000;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D5K4MV7298;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DeepSpaceBlade/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jmb.deepspaceblade;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		71307F56FE0F050CBFE8BD6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		89DC1C44C857E7A88B9FADAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASPLASHSCREEN_BACKGROUND_COLOR = 0x000000;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D5K4MV7298;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DeepSpaceBlade/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jmb.deepspaceblade;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D4147F9DEB4AD84BF3A14790 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE605FB886C05338BCB3D533 /* Build configuration list for PBXNativeTarget "DeepSpaceBlade" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12653BB3A8FD0E8749A549D2 /* Debug */,
+				89DC1C44C857E7A88B9FADAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9898A0EB58D6691901DFE9F /* Build configuration list for PBXProject "DeepSpaceBlade" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71307F56FE0F050CBFE8BD6D /* Debug */,
+				D4147F9DEB4AD84BF3A14790 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
+}

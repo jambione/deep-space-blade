@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Deep Space Blade — Path Designer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#07070f;color:#b8c4e0;font-family:'SF Mono',Consolas,monospace;font-size:12px;height:100vh;display:flex;flex-direction:column;overflow:hidden;user-select:none}
+header{background:#0d0d1e;padding:8px 16px;border-bottom:1px solid #1e1e3a;display:flex;align-items:center;gap:16px;flex-shrink:0}
+header h1{font-size:14px;color:#00d4ff;letter-spacing:2px;font-weight:700}
+header .sub{color:#4a5080;font-size:11px}
+.workspace{display:flex;flex:1;overflow:hidden}
+.panel{background:#0d0d1e;padding:10px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.panel.left{width:170px;border-right:1px solid #1e1e3a}
+.panel.right{width:230px;border-left:1px solid #1e1e3a}
+.canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:#05050c;position:relative}
+canvas{cursor:crosshair;display:block;border-radius:2px}
+.section-title{color:#00d4ff;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding-bottom:4px;border-bottom:1px solid #1e1e3a;margin-bottom:2px}
+.btn{background:#141428;border:1px solid #2a2a4a;color:#b8c4e0;padding:5px 10px;border-radius:3px;cursor:pointer;font-family:inherit;font-size:11px;width:100%;text-align:left;transition:all .15s}
+.btn:hover{border-color:#00d4ff;color:#00d4ff}
+.btn.active{background:#001a2e;border-color:#00d4ff;color:#00d4ff}
+.btn.danger{border-color:#3a1a1a}
+.btn.danger:hover{border-color:#ff4444;color:#ff4444}
+.btn.green{border-color:#1a3a1a}
+.btn.green:hover{border-color:#44ff88;color:#44ff88}
+.radio-group{display:flex;flex-direction:column;gap:3px}
+.radio-row{display:flex;align-items:center;gap:6px;cursor:pointer;padding:4px 6px;border-radius:3px;border:1px solid transparent}
+.radio-row:hover{border-color:#2a2a4a}
+.radio-row.active{background:#0a1a2e;border-color:#00d4ff}
+.radio-row input{accent-color:#00d4ff}
+.radio-row label{cursor:pointer;color:#b8c4e0;font-size:11px}
+.enemy-palette{display:flex;flex-direction:column;gap:3px}
+.enemy-btn{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:3px;border:1px solid #2a2a4a;cursor:pointer;transition:all .15s}
+.enemy-btn:hover{border-color:#00d4ff}
+.enemy-btn.selected{background:#001a2e;border-color:#00d4ff}
+.enemy-dot{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+.slider-row{display:flex;flex-direction:column;gap:3px}
+.slider-row label{display:flex;justify-content:space-between;color:#7080a0;font-size:10px}
+.slider-row label span{color:#b8c4e0}
+input[type=range]{width:100%;accent-color:#00d4ff;height:18px}
+input[type=number],input[type=text]{background:#141428;border:1px solid #2a2a4a;color:#b8c4e0;padding:3px 6px;border-radius:3px;font-family:inherit;font-size:11px;width:100%}
+input[type=number]:focus,input[type=text]:focus{outline:none;border-color:#00d4ff}
+.num-row{display:flex;gap:4px;align-items:center}
+.num-row label{color:#7080a0;font-size:10px;min-width:55px;flex-shrink:0}
+.wave-list{display:flex;flex-direction:column;gap:4px}
+.wave-item{background:#141428;border:1px solid #2a2a4a;padding:5px 8px;border-radius:3px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.wave-item:hover{border-color:#3a3a6a}
+.wave-item.active{background:#001a2e;border-color:#00d4ff}
+.wave-item .del{color:#3a2020;cursor:pointer;font-size:10px;padding:0 4px}
+.wave-item .del:hover{color:#ff4444}
+.json-footer{background:#0a0a18;border-top:1px solid #1e1e3a;padding:8px;display:flex;gap:6px;align-items:flex-start;flex-shrink:0;max-height:140px}
+.json-footer textarea{flex:1;background:#141428;border:1px solid #2a2a4a;color:#7da878;padding:6px;border-radius:3px;font-family:'SF Mono',Consolas,monospace;font-size:10px;resize:none;height:120px}
+.json-footer textarea:focus{outline:none;border-color:#00d4ff}
+.footer-btns{display:flex;flex-direction:column;gap:4px}
+.status{color:#4a5080;font-size:10px;padding:2px 0}
+.hint{color:#3a4060;font-size:10px;line-height:1.4;padding:3px 0}
+.tag{display:inline-block;padding:1px 5px;border-radius:2px;font-size:9px;letter-spacing:1px;text-transform:uppercase}
+.tag.entry{background:#0a1a30;color:#00d4ff;border:1px solid #004488}
+.tag.dive{background:#1a100a;color:#ff8800;border:1px solid #442200}
+.num2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ DEEP SPACE BLADE</h1>
+  <span class="sub">Path Designer v1</span>
+  <span class="sub" id="statusBar">Click canvas to add waypoints</span>
+</header>
+
+<div class="workspace">
+
+<!-- LEFT PANEL -->
+<aside class="panel left">
+  <div class="section-title">Mode</div>
+  <div class="radio-group" id="modeGroup">
+    <div class="radio-row active" data-mode="path" onclick="setMode('path')">
+      <input type="radio" name="mode" checked> <label>Path Editor</label>
+    </div>
+    <div class="radio-row" data-mode="formation" onclick="setMode('formation')">
+      <input type="radio" name="mode"> <label>Formation</label>
+    </div>
+  </div>
+
+  <div class="section-title">Path Type</div>
+  <div class="radio-group" id="pathTypeGroup">
+    <div class="radio-row active" data-type="entry" onclick="setPathType('entry')">
+      <input type="radio" name="pathType" checked> <label>Entry <span class="tag entry">in</span></label>
+    </div>
+    <div class="radio-row" data-type="dive" onclick="setPathType('dive')">
+      <input type="radio" name="pathType"> <label>Dive <span class="tag dive">out</span></label>
+    </div>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div style="display:flex;flex-direction:column;gap:5px">
+    <div class="radio-row" id="mirrorToggle" onclick="toggleMirror()">
+      <input type="checkbox" id="mirrorCb"> <label>Mirror path (L↔R)</label>
+    </div>
+    <div class="radio-row" id="showFormToggle" onclick="toggleShowFormation()">
+      <input type="checkbox" id="showFormCb" checked> <label>Show formation</label>
+    </div>
+    <div class="radio-row" id="snapToggle" onclick="toggleSnap()">
+      <input type="checkbox" id="snapCb"> <label>Snap to grid</label>
+    </div>
+  </div>
+
+  <div class="section-title">Enemy (for formation)</div>
+  <div class="enemy-palette" id="enemyPalette"></div>
+
+  <div class="section-title">Actions</div>
+  <button class="btn green" onclick="previewPath()" id="previewBtn">▶ Preview</button>
+  <button class="btn" onclick="clearCurrentPath()">✕ Clear Path</button>
+  <button class="btn danger" onclick="clearAll()">⚠ Clear All</button>
+
+  <div class="hint" id="hintBox">Click to add waypoints.<br>Drag to move.<br>Right-click to delete.<br>Ctrl+Z to undo.</div>
+</aside>
+
+<!-- CANVAS -->
+<main class="canvas-wrap">
+  <canvas id="canvas"></canvas>
+</main>
+
+<!-- RIGHT PANEL -->
+<aside class="panel right">
+  <div class="section-title">Formation</div>
+  <div class="num2">
+    <div class="slider-row">
+      <label>Rows <span id="rowsVal">2</span></label>
+      <input type="range" min="1" max="6" value="2" id="rowsSlider" oninput="updateFormation()">
+    </div>
+    <div class="slider-row">
+      <label>Cols <span id="colsVal">4</span></label>
+      <input type="range" min="1" max="8" value="4" id="colsSlider" oninput="updateFormation()">
+    </div>
+  </div>
+  <div class="slider-row">
+    <label>Spacing X <span id="spacingXVal">72</span>px</label>
+    <input type="range" min="30" max="120" value="72" id="spacingXSlider" oninput="updateFormation()">
+  </div>
+  <div class="slider-row">
+    <label>Spacing Y <span id="spacingYVal">60</span>px</label>
+    <input type="range" min="30" max="100" value="60" id="spacingYSlider" oninput="updateFormation()">
+  </div>
+  <div class="num-row">
+    <label>Anchor X</label>
+    <input type="number" min="0" max="1" step="0.05" value="0.5" id="anchorX" oninput="updateFormation()">
+  </div>
+  <div class="num-row">
+    <label>Anchor Y</label>
+    <input type="number" min="0" max="1" step="0.05" value="0.76" id="anchorY" oninput="updateFormation()">
+  </div>
+
+  <div class="section-title" style="margin-top:4px">Wave Settings</div>
+  <div class="num-row">
+    <label>Hold (s)</label>
+    <input type="number" min="0" max="20" step="0.5" value="3" id="holdTime">
+  </div>
+  <div class="num-row">
+    <label>Speed</label>
+    <input type="number" min="50" max="500" step="10" value="160" id="enemySpeed">
+  </div>
+  <div class="num-row">
+    <label>Entry Style</label>
+    <select id="entryStyleSel" style="background:#141428;border:1px solid #2a2a4a;color:#b8c4e0;padding:3px 6px;border-radius:3px;font-family:inherit;font-size:11px;flex:1">
+      <option value="custom">custom (drawn)</option>
+      <option value="swoopFromLeft">swoopFromLeft</option>
+      <option value="swoopFromRight">swoopFromRight</option>
+      <option value="dropFromTop">dropFromTop</option>
+      <option value="spiralIn">spiralIn</option>
+    </select>
+  </div>
+
+  <div class="section-title" style="margin-top:4px">Waves</div>
+  <div class="wave-list" id="waveList"></div>
+  <button class="btn green" onclick="addWave()" style="margin-top:4px">+ Add Wave</button>
+
+  <div class="section-title" style="margin-top:4px">Export</div>
+  <button class="btn green" onclick="exportJSON()">⬇ Export Wave JSON</button>
+  <button class="btn green" onclick="exportAllJSON()">⬇ Export All Waves</button>
+  <button class="btn" onclick="loadFromJSON()">⬆ Load JSON</button>
+  <button class="btn" onclick="copyJSON()">⎘ Copy to Clipboard</button>
+</aside>
+</div>
+
+<!-- JSON OUTPUT -->
+<div class="json-footer">
+  <textarea id="jsonOut" spellcheck="false" placeholder="// Wave JSON will appear here after export"></textarea>
+  <div class="footer-btns">
+    <button class="btn" onclick="copyJSON()" style="width:80px">Copy</button>
+    <button class="btn" onclick="document.getElementById('jsonOut').value=''" style="width:80px">Clear</button>
+  </div>
+</div>
+
+<script>
+// ─── Constants ──────────────────────────────────────────────────────────────
+const GAME_W = 390, GAME_H = 844;  // iPhone 14 logical size
+const BLUEPRINTS = [
+  { id:'grunt',     color:'#44aaff', label:'Grunt' },
+  { id:'fighter',   color:'#ff8844', label:'Fighter' },
+  { id:'commander', color:'#aa44ff', label:'Commander' },
+  { id:'boss_sector1', color:'#ff4444', label:'Boss' },
+];
+
+// ─── State ──────────────────────────────────────────────────────────────────
+let mode = 'path';          // 'path' | 'formation'
+let pathType = 'entry';     // 'entry' | 'dive'
+let mirror = false;
+let showFormation = true;
+let snapToGrid = false;
+let selectedEnemy = 'grunt';
+
+let waves = [{
+  entryPoints: [],
+  divePoints:  [],
+  formation: { rows:2, cols:4, spacingX:72, spacingY:60, anchorX:0.5, anchorY:0.76, slots:{} },
+  holdTime: 3,
+  speed: 160,
+  entryStyle: 'custom',
+}];
+let activeWaveIdx = 0;
+
+let undoStack = [];
+let dragging = null;     // { points, idx }
+let hovering = null;     // index into current points
+let animT = 0;
+let animAF = null;
+let previewRunning = false;
+
+// ─── Canvas Setup ───────────────────────────────────────────────────────────
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let CW, CH, SCALE;
+
+function resize() {
+  const wrap = canvas.parentElement;
+  const maxH = wrap.clientHeight - 20;
+  const maxW = wrap.clientWidth  - 20;
+  SCALE = Math.min(maxW / GAME_W, maxH / GAME_H);
+  CW = Math.round(GAME_W * SCALE);
+  CH = Math.round(GAME_H * SCALE);
+  canvas.width  = CW;
+  canvas.height = CH;
+  draw();
+}
+
+window.addEventListener('resize', resize);
+setTimeout(resize, 50);
+
+// ─── Coordinate Transforms ──────────────────────────────────────────────────
+// Normalized game coords: (0,0) = bottom-left, (1,1) = top-right (y-up, SpriteKit)
+function gameToCanvas(nx, ny) {
+  return { x: nx * GAME_W * SCALE, y: (1 - ny) * GAME_H * SCALE };
+}
+function canvasToGame(cx, cy) {
+  return { x: cx / (GAME_W * SCALE), y: 1 - cy / (GAME_H * SCALE) };
+}
+function gameUnitsToCanvas(v) { return v * SCALE; }
+
+function snapPoint(p) {
+  if (!snapToGrid) return p;
+  const gs = 20 * SCALE / (GAME_W * SCALE); // 20px grid in normalized
+  return { x: Math.round(p.x / gs) * gs, y: Math.round(p.y / gs) * gs };
+}
+
+// ─── Active Wave Accessors ──────────────────────────────────────────────────
+function activeWave()   { return waves[activeWaveIdx]; }
+function currentPoints(){ return pathType === 'entry' ? activeWave().entryPoints : activeWave().divePoints; }
+
+// ─── Draw ────────────────────────────────────────────────────────────────────
+function draw() {
+  if (!CW) return;
+  ctx.clearRect(0, 0, CW, CH);
+
+  // Background
+  ctx.fillStyle = '#07070f';
+  ctx.fillRect(0, 0, CW, CH);
+
+  // Subtle grid
+  drawGrid();
+
+  // Formation
+  if (showFormation) drawFormation();
+
+  // All paths (dim other path type)
+  const w = activeWave();
+  drawPath(w.entryPoints, '#00d4ff', pathType === 'entry' ? 1 : 0.25);
+  drawPath(w.divePoints,  '#ff8800', pathType === 'dive'  ? 1 : 0.25);
+
+  // Mirror ghost
+  if (mirror) {
+    const pts = mirrorPoints(currentPoints());
+    drawPath(pts, pathType === 'entry' ? '#00d4ff' : '#ff8800', 0.3);
+  }
+
+  // Waypoint handles
+  drawHandles(currentPoints());
+
+  // Preview animation dot
+  if (previewRunning) drawPreviewDot();
+
+  // Hover indicator
+  if (hovering !== null && mode === 'path') {
+    const p = currentPoints()[hovering];
+    const c = gameToCanvas(p.x, p.y);
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, 10, 0, Math.PI * 2);
+    ctx.strokeStyle = '#ffffff44';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+}
+
+function drawGrid() {
+  const step = 40 * SCALE;
+  ctx.strokeStyle = '#12121f';
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= CW; x += step) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, CH); ctx.stroke();
+  }
+  for (let y = 0; y <= CH; y += step) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(CW, y); ctx.stroke();
+  }
+  // Center line
+  ctx.strokeStyle = '#1e1e3a';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 6]);
+  ctx.beginPath(); ctx.moveTo(CW/2, 0); ctx.lineTo(CW/2, CH); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawFormation() {
+  const { rows, cols, spacingX, spacingY, anchorX, anchorY, slots } = activeWave().formation;
+  const totalW = (cols - 1) * spacingX;
+  const totalH = (rows - 1) * spacingY;
+  const originX = anchorX * GAME_W - totalW / 2;
+  const originY = anchorY * GAME_H - totalH / 2;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const idx = r * cols + c;
+      const gx = originX + c * spacingX;
+      const gy = originY + r * spacingY;
+      const cv = gameToCanvas(gx / GAME_W, gy / GAME_H);
+      const bpId = slots[idx];
+      const bp = BLUEPRINTS.find(b => b.id === bpId) || BLUEPRINTS[0];
+      const sz = 14 * SCALE;
+
+      ctx.fillStyle = bpId ? bp.color + '33' : '#ffffff11';
+      ctx.strokeStyle = bpId ? bp.color + '88' : '#2a2a4a';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.rect(cv.x - sz/2, cv.y - sz/2, sz, sz);
+      ctx.fill(); ctx.stroke();
+
+      if (!bpId) {
+        ctx.fillStyle = '#3a3a5a';
+        ctx.font = `${8 * SCALE}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(idx, cv.x, cv.y);
+      }
+    }
+  }
+}
+
+function drawPath(points, color, alpha) {
+  if (points.length < 2) return;
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  const first = gameToCanvas(points[0].x, points[0].y);
+  ctx.moveTo(first.x, first.y);
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = gameToCanvas(points[Math.max(0,i-1)].x, points[Math.max(0,i-1)].y);
+    const p1 = gameToCanvas(points[i].x, points[i].y);
+    const p2 = gameToCanvas(points[i+1].x, points[i+1].y);
+    const p3 = gameToCanvas(points[Math.min(points.length-1,i+2)].x, points[Math.min(points.length-1,i+2)].y);
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+  }
+  ctx.stroke();
+
+  // Direction arrows
+  if (points.length >= 2 && alpha > 0.4) {
+    drawArrows(points, color);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawArrows(points, color) {
+  // Draw arrow every ~80px along path
+  for (let i = 0; i < points.length - 1; i++) {
+    const p1 = gameToCanvas(points[i].x, points[i].y);
+    const p2 = gameToCanvas(points[i+1].x, points[i+1].y);
+    const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2;
+    const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+    const size = 7;
+    ctx.save();
+    ctx.translate(mx, my);
+    ctx.rotate(angle);
+    ctx.fillStyle = color + 'cc';
+    ctx.beginPath();
+    ctx.moveTo(size, 0);
+    ctx.lineTo(-size/2, size/2);
+    ctx.lineTo(-size/2, -size/2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawHandles(points) {
+  points.forEach((p, i) => {
+    const c = gameToCanvas(p.x, p.y);
+    const isFirst = i === 0, isLast = i === points.length - 1;
+    const r = 5;
+
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, r + 2, 0, Math.PI * 2);
+    ctx.fillStyle = isFirst ? '#00ff88' : isLast ? '#ff4444' : '#ffffff';
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = isFirst ? '#004422' : isLast ? '#440000' : '#1a1a3a';
+    ctx.fill();
+
+    // Index label
+    if (points.length <= 20) {
+      ctx.fillStyle = '#c0c8e0';
+      ctx.font = `${9 * Math.max(SCALE, 0.8)}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(i, c.x, c.y);
+    }
+  });
+}
+
+function drawPreviewDot() {
+  const pts = currentPoints();
+  if (pts.length < 2) return;
+  const pos = samplePath(pts, animT);
+  if (!pos) return;
+  const c = gameToCanvas(pos.x, pos.y);
+  ctx.beginPath();
+  ctx.arc(c.x, c.y, 10, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff22';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(c.x, c.y, 6, 0, Math.PI * 2);
+  ctx.fillStyle = '#00d4ff';
+  ctx.fill();
+  // Glow
+  ctx.shadowBlur = 12;
+  ctx.shadowColor = '#00d4ff';
+  ctx.beginPath();
+  ctx.arc(c.x, c.y, 4, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+// ─── Path Sampling (Catmull-Rom) ─────────────────────────────────────────────
+function samplePath(points, t) {
+  if (points.length < 2) return null;
+  const n = points.length - 1;
+  const seg = Math.floor(t * n);
+  const local = (t * n) - seg;
+  const i = Math.min(seg, n - 1);
+  const p0 = points[Math.max(0, i-1)];
+  const p1 = points[i];
+  const p2 = points[Math.min(n, i+1)];
+  const p3 = points[Math.min(n, i+2)];
+  return {
+    x: catmullRom(p0.x, p1.x, p2.x, p3.x, local),
+    y: catmullRom(p0.y, p1.y, p2.y, p3.y, local),
+  };
+}
+
+function catmullRom(p0, p1, p2, p3, t) {
+  return 0.5 * ((2*p1) + (-p0+p2)*t + (2*p0-5*p1+4*p2-p3)*t*t + (-p0+3*p1-3*p2+p3)*t*t*t);
+}
+
+// ─── Preview Animation ───────────────────────────────────────────────────────
+function previewPath() {
+  if (previewRunning) { stopPreview(); return; }
+  if (currentPoints().length < 2) { setStatus('Add at least 2 waypoints first.'); return; }
+  previewRunning = true;
+  animT = 0;
+  document.getElementById('previewBtn').textContent = '■ Stop';
+  const speed = 0.003;
+  function animate() {
+    animT += speed;
+    if (animT >= 1) { stopPreview(); return; }
+    draw();
+    animAF = requestAnimationFrame(animate);
+  }
+  animAF = requestAnimationFrame(animate);
+}
+
+function stopPreview() {
+  previewRunning = false;
+  if (animAF) cancelAnimationFrame(animAF);
+  document.getElementById('previewBtn').textContent = '▶ Preview';
+  draw();
+}
+
+// ─── Mouse Events ─────────────────────────────────────────────────────────────
+canvas.addEventListener('contextmenu', e => { e.preventDefault(); deleteNearestPoint(e); });
+canvas.addEventListener('mousedown',   e => { if (e.button === 0) onMouseDown(e); });
+canvas.addEventListener('mousemove',   onMouseMove);
+canvas.addEventListener('mouseup',     onMouseUp);
+canvas.addEventListener('mouseleave',  () => { dragging = null; hovering = null; draw(); });
+
+function canvasXY(e) {
+  const r = canvas.getBoundingClientRect();
+  return { cx: e.clientX - r.left, cy: e.clientY - r.top };
+}
+
+function findNearestPoint(cx, cy, threshold = 14) {
+  const pts = currentPoints();
+  let best = null, bestD = threshold;
+  pts.forEach((p, i) => {
+    const c = gameToCanvas(p.x, p.y);
+    const d = Math.hypot(cx - c.x, cy - c.y);
+    if (d < bestD) { bestD = d; best = i; }
+  });
+  return best;
+}
+
+function onMouseDown(e) {
+  if (mode !== 'path') return;
+  const { cx, cy } = canvasXY(e);
+  const near = findNearestPoint(cx, cy);
+  if (near !== null) {
+    dragging = { idx: near };
+  } else {
+    // Add new point
+    pushUndo();
+    let gp = canvasToGame(cx, cy);
+    gp = snapPoint(gp);
+    gp.x = Math.max(0, Math.min(1, gp.x));
+    gp.y = Math.max(0, Math.min(1, gp.y));
+    currentPoints().push(gp);
+    setStatus(`Waypoint ${currentPoints().length - 1} added at (${gp.x.toFixed(2)}, ${gp.y.toFixed(2)})`);
+    draw();
+  }
+}
+
+function onMouseMove(e) {
+  const { cx, cy } = canvasXY(e);
+  if (dragging !== null && mode === 'path') {
+    let gp = canvasToGame(cx, cy);
+    gp = snapPoint(gp);
+    gp.x = Math.max(0, Math.min(1, gp.x));
+    gp.y = Math.max(0, Math.min(1, gp.y));
+    currentPoints()[dragging.idx] = gp;
+    draw();
+  } else {
+    const near = findNearestPoint(cx, cy, 14);
+    if (near !== hovering) { hovering = near; draw(); }
+  }
+}
+
+function onMouseUp() { dragging = null; }
+
+function deleteNearestPoint(e) {
+  if (mode !== 'path') return;
+  const { cx, cy } = canvasXY(e);
+  const near = findNearestPoint(cx, cy, 20);
+  if (near !== null) {
+    pushUndo();
+    currentPoints().splice(near, 1);
+    setStatus(`Deleted waypoint ${near}`);
+    draw();
+  }
+}
+
+// ─── Formation Click ─────────────────────────────────────────────────────────
+canvas.addEventListener('click', e => {
+  if (mode !== 'formation') return;
+  const { cx, cy } = canvasXY(e);
+  const { rows, cols, spacingX, spacingY, anchorX, anchorY, slots } = activeWave().formation;
+  const totalW = (cols - 1) * spacingX;
+  const totalH = (rows - 1) * spacingY;
+  const originX = anchorX * GAME_W - totalW / 2;
+  const originY = anchorY * GAME_H - totalH / 2;
+  const threshold = Math.min(spacingX, spacingY) * SCALE * 0.48;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const gx = originX + c * spacingX;
+      const gy = originY + r * spacingY;
+      const cv = gameToCanvas(gx / GAME_W, gy / GAME_H);
+      if (Math.hypot(cx - cv.x, cy - cv.y) < threshold) {
+        const idx = r * cols + c;
+        const current = slots[idx];
+        const bpIdx = BLUEPRINTS.findIndex(b => b.id === current);
+        const next = BLUEPRINTS[(bpIdx + 1) % BLUEPRINTS.length];
+        if (bpIdx === BLUEPRINTS.length - 1) delete slots[idx];
+        else slots[idx] = next.id;
+        draw();
+        return;
+      }
+    }
+  }
+});
+
+// ─── Undo ────────────────────────────────────────────────────────────────────
+function pushUndo() {
+  undoStack.push(JSON.stringify(waves));
+  if (undoStack.length > 40) undoStack.shift();
+}
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+    if (undoStack.length) {
+      waves = JSON.parse(undoStack.pop());
+      draw(); renderWaveList();
+    }
+  }
+  if (e.key === ' ') { e.preventDefault(); previewPath(); }
+});
+
+// ─── Mirror ──────────────────────────────────────────────────────────────────
+function mirrorPoints(pts) {
+  return pts.map(p => ({ x: 1 - p.x, y: p.y }));
+}
+
+// ─── Mode / type toggles ─────────────────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('#modeGroup .radio-row').forEach(r => {
+    r.classList.toggle('active', r.dataset.mode === m);
+    r.querySelector('input').checked = r.dataset.mode === m;
+  });
+  document.getElementById('hintBox').textContent = m === 'formation'
+    ? 'Click a formation slot to cycle enemy type. Adjust rows/cols/spacing on the right.'
+    : 'Click to add waypoints.\nDrag to move.\nRight-click to delete.\nCtrl+Z to undo.';
+  draw();
+}
+
+function setPathType(t) {
+  pathType = t;
+  document.querySelectorAll('#pathTypeGroup .radio-row').forEach(r => {
+    r.classList.toggle('active', r.dataset.type === t);
+    r.querySelector('input').checked = r.dataset.type === t;
+  });
+  stopPreview();
+  draw();
+}
+
+function toggleMirror() {
+  mirror = !mirror;
+  document.getElementById('mirrorCb').checked = mirror;
+  document.getElementById('mirrorToggle').classList.toggle('active', mirror);
+  draw();
+}
+
+function toggleShowFormation() {
+  showFormation = !showFormation;
+  document.getElementById('showFormCb').checked = showFormation;
+  document.getElementById('showFormToggle').classList.toggle('active', showFormation);
+  draw();
+}
+
+function toggleSnap() {
+  snapToGrid = !snapToGrid;
+  document.getElementById('snapCb').checked = snapToGrid;
+  document.getElementById('snapToggle').classList.toggle('active', snapToGrid);
+}
+
+// ─── Formation Controls ───────────────────────────────────────────────────────
+function updateFormation() {
+  const f = activeWave().formation;
+  f.rows = +document.getElementById('rowsSlider').value;
+  f.cols = +document.getElementById('colsSlider').value;
+  f.spacingX = +document.getElementById('spacingXSlider').value;
+  f.spacingY = +document.getElementById('spacingYSlider').value;
+  f.anchorX = +document.getElementById('anchorX').value;
+  f.anchorY = +document.getElementById('anchorY').value;
+  document.getElementById('rowsVal').textContent = f.rows;
+  document.getElementById('colsVal').textContent = f.cols;
+  document.getElementById('spacingXVal').textContent = f.spacingX;
+  document.getElementById('spacingYVal').textContent = f.spacingY;
+  draw();
+}
+
+function syncFormationUI(f) {
+  document.getElementById('rowsSlider').value = f.rows;
+  document.getElementById('colsSlider').value = f.cols;
+  document.getElementById('spacingXSlider').value = f.spacingX;
+  document.getElementById('spacingYSlider').value = f.spacingY;
+  document.getElementById('anchorX').value = f.anchorX;
+  document.getElementById('anchorY').value = f.anchorY;
+  document.getElementById('rowsVal').textContent = f.rows;
+  document.getElementById('colsVal').textContent = f.cols;
+  document.getElementById('spacingXVal').textContent = f.spacingX;
+  document.getElementById('spacingYVal').textContent = f.spacingY;
+}
+
+// ─── Wave List ────────────────────────────────────────────────────────────────
+function renderWaveList() {
+  const list = document.getElementById('waveList');
+  list.innerHTML = '';
+  waves.forEach((w, i) => {
+    const el = document.createElement('div');
+    el.className = 'wave-item' + (i === activeWaveIdx ? ' active' : '');
+    const pts = w.entryPoints.length;
+    el.innerHTML = `<span>Wave ${i+1} <span style="color:#4a5080">(${pts}pt)</span></span>`
+      + `<span class="del" onclick="deleteWave(${i},event)">✕</span>`;
+    el.addEventListener('click', () => selectWave(i));
+    list.appendChild(el);
+  });
+}
+
+function addWave() {
+  waves.push({
+    entryPoints: [], divePoints: [],
+    formation: { rows:2, cols:4, spacingX:72, spacingY:60, anchorX:0.5, anchorY:0.76, slots:{} },
+    holdTime: 3, speed: 160, entryStyle: 'custom',
+  });
+  selectWave(waves.length - 1);
+}
+
+function selectWave(i) {
+  activeWaveIdx = i;
+  syncFormationUI(activeWave().formation);
+  document.getElementById('holdTime').value = activeWave().holdTime;
+  document.getElementById('enemySpeed').value = activeWave().speed;
+  document.getElementById('entryStyleSel').value = activeWave().entryStyle;
+  stopPreview();
+  renderWaveList();
+  draw();
+}
+
+function deleteWave(i, e) {
+  e.stopPropagation();
+  if (waves.length === 1) { alert('Need at least one wave.'); return; }
+  pushUndo();
+  waves.splice(i, 1);
+  if (activeWaveIdx >= waves.length) activeWaveIdx = waves.length - 1;
+  selectWave(activeWaveIdx);
+}
+
+// ─── Clear ────────────────────────────────────────────────────────────────────
+function clearCurrentPath() {
+  pushUndo();
+  if (pathType === 'entry') activeWave().entryPoints = [];
+  else activeWave().divePoints = [];
+  draw();
+}
+
+function clearAll() {
+  if (!confirm('Clear all waves and paths?')) return;
+  pushUndo();
+  waves = [{ entryPoints:[], divePoints:[],
+    formation:{ rows:2, cols:4, spacingX:72, spacingY:60, anchorX:0.5, anchorY:0.76, slots:{} },
+    holdTime:3, speed:160, entryStyle:'custom' }];
+  activeWaveIdx = 0;
+  selectWave(0);
+}
+
+// ─── Export ───────────────────────────────────────────────────────────────────
+function waveToJSON(w) {
+  const spawns = [];
+  const occupied = {};
+  Object.entries(w.formation.slots).forEach(([slot, bpId]) => {
+    if (!occupied[bpId]) occupied[bpId] = [];
+    occupied[bpId].push(+slot);
+  });
+  Object.entries(occupied).forEach(([bpId, slots]) => {
+    spawns.push({ blueprintId: bpId, slots });
+  });
+
+  const entryStyle = document.getElementById('entryStyleSel').value;
+  const holdTime   = +document.getElementById('holdTime').value;
+  const speed      = +document.getElementById('enemySpeed').value;
+
+  const result = {
+    spawns,
+    formation: {
+      rows: w.formation.rows, cols: w.formation.cols,
+      spacingX: w.formation.spacingX, spacingY: w.formation.spacingY,
+      anchorX: w.formation.anchorX,   anchorY: w.formation.anchorY,
+    },
+    entryStyle,
+    holdTime,
+  };
+
+  if (entryStyle === 'custom') {
+    const entryPts = w.entryPoints.map(p => ({
+      x: Math.round(p.x * 1000) / 1000,
+      y: Math.round(p.y * 1000) / 1000,
+    }));
+    const divePts = w.divePoints.map(p => ({
+      x: Math.round(p.x * 1000) / 1000,
+      y: Math.round(p.y * 1000) / 1000,
+    }));
+    if (entryPts.length) result.entryPoints = entryPts;
+    if (divePts.length)  result.divePoints  = divePts;
+  }
+
+  // Mirror entry path if enabled
+  if (mirror && result.entryPoints) {
+    result.mirrorEntryPoints = result.entryPoints.map(p => ({
+      x: Math.round((1 - p.x) * 1000) / 1000, y: p.y
+    }));
+  }
+
+  return result;
+}
+
+function exportJSON() {
+  const j = JSON.stringify(waveToJSON(activeWave()), null, 2);
+  document.getElementById('jsonOut').value = j;
+  setStatus('Wave exported to JSON panel below.');
+}
+
+function exportAllJSON() {
+  const all = waves.map(waveToJSON);
+  document.getElementById('jsonOut').value = JSON.stringify(all, null, 2);
+  setStatus(`${all.length} wave(s) exported.`);
+}
+
+function copyJSON() {
+  const ta = document.getElementById('jsonOut');
+  if (!ta.value) { exportJSON(); }
+  navigator.clipboard.writeText(ta.value).then(() => setStatus('Copied to clipboard!'));
+}
+
+function loadFromJSON() {
+  const ta = document.getElementById('jsonOut');
+  const src = ta.value.trim();
+  if (!src) { setStatus('Paste JSON into the text area first.'); return; }
+  try {
+    let parsed = JSON.parse(src);
+    if (!Array.isArray(parsed)) parsed = [parsed];
+    pushUndo();
+    waves = parsed.map(w => ({
+      entryPoints: w.entryPoints || [],
+      divePoints:  w.divePoints  || [],
+      formation: {
+        rows: w.formation?.rows ?? 2,
+        cols: w.formation?.cols ?? 4,
+        spacingX: w.formation?.spacingX ?? 72,
+        spacingY: w.formation?.spacingY ?? 60,
+        anchorX:  w.formation?.anchorX  ?? 0.5,
+        anchorY:  w.formation?.anchorY  ?? 0.76,
+        slots: {},
+      },
+      holdTime: w.holdTime ?? 3,
+      speed:    w.speed    ?? 160,
+      entryStyle: w.entryStyle ?? 'custom',
+    }));
+    // Rebuild slots from spawns
+    waves.forEach((wave, wi) => {
+      const src = parsed[wi];
+      if (src.spawns) src.spawns.forEach(sp => {
+        sp.slots.forEach(s => { wave.formation.slots[s] = sp.blueprintId; });
+      });
+    });
+    selectWave(0);
+    setStatus('Loaded successfully.');
+  } catch(err) {
+    setStatus('Parse error: ' + err.message);
+  }
+}
+
+// ─── Enemy Palette ────────────────────────────────────────────────────────────
+function renderPalette() {
+  const el = document.getElementById('enemyPalette');
+  el.innerHTML = '';
+  BLUEPRINTS.forEach(bp => {
+    const btn = document.createElement('div');
+    btn.className = 'enemy-btn' + (selectedEnemy === bp.id ? ' selected' : '');
+    btn.innerHTML = `<div class="enemy-dot" style="background:${bp.color}"></div><span>${bp.label}</span>`;
+    btn.onclick = () => {
+      selectedEnemy = bp.id;
+      document.querySelectorAll('.enemy-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    el.appendChild(btn);
+  });
+}
+
+// ─── Status ───────────────────────────────────────────────────────────────────
+function setStatus(msg) {
+  document.getElementById('statusBar').textContent = msg;
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+renderPalette();
+renderWaveList();
+resize();
+</script>
+</body>
+</html>

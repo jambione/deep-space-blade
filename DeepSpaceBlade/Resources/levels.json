@@ -1,0 +1,97 @@
+[
+  {
+    "id": 1,
+    "name": "Sector 1 — Alpha Approach",
+    "backgroundName": "bg_sector1",
+    "musicTrack": "music_sector1",
+    "bossId": "boss_sector1",
+    "waves": [
+      {
+        "spawns": [
+          { "blueprintId": "grunt", "slots": [0,1,2,3,4,5,6,7] }
+        ],
+        "formation": {
+          "rows": 2,
+          "cols": 4,
+          "spacingX": 72,
+          "spacingY": 60,
+          "anchorX": 0.5,
+          "anchorY": 0.76
+        },
+        "entryStyle": "swoopFromLeft",
+        "holdTime": 3.0
+      },
+      {
+        "spawns": [
+          { "blueprintId": "grunt",   "slots": [0,1,2,3,4,5] },
+          { "blueprintId": "fighter", "slots": [6,7,8] }
+        ],
+        "formation": {
+          "rows": 3,
+          "cols": 3,
+          "spacingX": 76,
+          "spacingY": 58,
+          "anchorX": 0.5,
+          "anchorY": 0.78
+        },
+        "entryStyle": "swoopFromRight",
+        "holdTime": 2.5
+      },
+      {
+        "spawns": [
+          { "blueprintId": "fighter",   "slots": [0,1,2,3] },
+          { "blueprintId": "commander", "slots": [4,5] }
+        ],
+        "formation": {
+          "rows": 2,
+          "cols": 3,
+          "spacingX": 80,
+          "spacingY": 64,
+          "anchorX": 0.5,
+          "anchorY": 0.78
+        },
+        "entryStyle": "dropFromTop",
+        "holdTime": 2.0
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Sector 2 — The Gauntlet",
+    "backgroundName": "bg_sector2",
+    "musicTrack": "music_sector2",
+    "bossId": null,
+    "waves": [
+      {
+        "spawns": [
+          { "blueprintId": "fighter", "slots": [0,1,2,3,4,5,6,7] }
+        ],
+        "formation": {
+          "rows": 2,
+          "cols": 4,
+          "spacingX": 72,
+          "spacingY": 60,
+          "anchorX": 0.5,
+          "anchorY": 0.76
+        },
+        "entryStyle": "spiralIn",
+        "holdTime": 2.0
+      },
+      {
+        "spawns": [
+          { "blueprintId": "commander", "slots": [0,1,2,3,4,5,6,7,8,9] }
+        ],
+        "formation": {
+          "rows": 2,
+          "cols": 5,
+          "spacingX": 66,
+          "spacingY": 62,
+          "anchorX": 0.5,
+          "anchorY": 0.78
+        },
+        "entryStyle": "swoopFromLeft",
+        "holdTime": 1.8
+      }
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "grunt",
+    "displayName": "Grunt Fighter",
+    "spriteName": "enemy_grunt",
+    "health": 1,
+    "speed": 160,
+    "scoreValue": 100,
+    "width": 36,
+    "height": 34,
+    "animationFrameCount": 4,
+    "fire": {
+      "type": "single",
+      "cooldown": 3.0,
+      "bulletSpeed": 320,
+      "bulletSprite": "bullet_enemy",
+      "spreadAngle": 0,
+      "burstCount": 1
+    },
+    "dive": {
+      "type": "sinusoidal",
+      "speed": 220,
+      "fireWhileDiving": false
+    },
+    "drops": [
+      { "itemId": "doubleShot", "chance": 0.05 }
+    ]
+  },
+  {
+    "id": "fighter",
+    "displayName": "Alpha Fighter",
+    "spriteName": "enemy_fighter",
+    "health": 2,
+    "speed": 180,
+    "scoreValue": 200,
+    "width": 42,
+    "height": 40,
+    "animationFrameCount": 4,
+    "fire": {
+      "type": "aimed",
+      "cooldown": 2.2,
+      "bulletSpeed": 350,
+      "bulletSprite": "bullet_enemy_red",
+      "spreadAngle": 0,
+      "burstCount": 1
+    },
+    "dive": {
+      "type": "swoop",
+      "speed": 260,
+      "fireWhileDiving": true
+    },
+    "drops": [
+      { "itemId": "tripleShot", "chance": 0.08 },
+      { "itemId": "shield",     "chance": 0.04 }
+    ]
+  },
+  {
+    "id": "commander",
+    "displayName": "Commander",
+    "spriteName": "enemy_commander",
+    "health": 4,
+    "speed": 140,
+    "scoreValue": 400,
+    "width": 52,
+    "height": 50,
+    "animationFrameCount": 4,
+    "fire": {
+      "type": "spread",
+      "cooldown": 2.8,
+      "bulletSpeed": 300,
+      "bulletSprite": "bullet_enemy",
+      "spreadAngle": 40,
+      "burstCount": 1
+    },
+    "dive": {
+      "type": "loop",
+      "speed": 200,
+      "fireWhileDiving": true
+    },
+    "drops": [
+      { "itemId": "bomb",      "chance": 0.15 },
+      { "itemId": "extraLife", "chance": 0.03 }
+    ]
+  },
+  {
+    "id": "boss_sector1",
+    "displayName": "Sector 1 Boss — Iron Hydra",
+    "spriteName": "boss_iron_hydra",
+    "health": 30,
+    "speed": 100,
+    "scoreValue": 5000,
+    "width": 96,
+    "height": 90,
+    "animationFrameCount": 4,
+    "fire": {
+      "type": "burst",
+      "cooldown": 1.4,
+      "bulletSpeed": 380,
+      "bulletSprite": "bullet_boss",
+      "spreadAngle": 60,
+      "burstCount": 5
+    },
+    "dive": {
+      "type": "sinusoidal",
+      "speed": 140,
+      "fireWhileDiving": true
+    },
+    "drops": [
+      { "itemId": "extraLife", "chance": 1.0 }
+    ]
+  }
+]
